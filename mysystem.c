@@ -10,15 +10,27 @@
 
 // system関数のクローン
 int mysystem(char *command) {
+  char *execpath = "/bin/sh";
   int status = 0;
 
   // ここにプログラムを書く
-
+  int pid = fork(); //分身を作る
+  if (pid < 0) status = -1;
+  if (pid != 0) {
+    while (wait (&status) != pid)
+    ;
+  } else {
+    // system (command);
+    execvp (execpath, &command);
+    perror (execpath);
+    exit(127);
+  }
   return status;
 }
 
 /* 実行例
 
 ここに実行例を書く
+$ make
 
 */
